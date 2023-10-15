@@ -10,45 +10,42 @@ mixer.music.load('space.ogg')
 mixer.music.play() 
 fire_sound = mixer.Sound('fire.ogg') 
 max_lost = 3
-
+ 
 font.init() 
 font2 = font.Font(None, 36) 
  
-img_back = "galaxy.jpg"  
-
+img_back = "galaxy.jpg" 
 img_hero = "rocket.png" 
-
 img_enemy = "ufo.png" 
-
 score = 0 
-
 lost = 0 
-
+  
 class GameSprite(sprite.Sprite): 
-    def __init__(self, player_image, player_x, player_y, size_x, size_y, player_speed):  
+    #конструктор класса 
+    def __init__(self, player_image, player_x, player_y, size_x, size_y, player_speed): 
+        #Вызываем конструктор класса 
         sprite.Sprite.__init__(self)
         self.image = transform.scale(image.load(player_image), (size_x, size_y))
         self.speed = player_speed 
-
         self.rect = self.image.get_rect() 
         self.rect.x = player_x 
         self.rect.y = player_y 
     def reset(self): 
             window.blit(self.image, (self.rect.x, self.rect.y)) 
 
-class Player(GameSprite): 
+class Player(GameSprite):  
     def update(self):
         keys = key.get_pressed() 
         if keys[K_LEFT] and self.rect.x > 5: self.rect.x -= self.speed 
-        if keys[K_RIGHT] and self.rect.x < win_width - 80: self.rect.x += self.speed 
+        if keys[K_RIGHT] and self.rect.x < win_width - 80: self.rect.x += self.speed  
     def fire(self):
         bullet = Bullet('bullet.png',self.rect.centerx, self.rect.top, 10, 15,-15) 
         bullets.add(bullet)
 
-class Enemy(GameSprite): 
+class Enemy(GameSprite):  
     def update(self): 
         self.rect.y += self.speed 
-        global lost 
+        global lost  
         if self.rect.y > win_height: 
             self.rect.x = randint(80, win_width - 80) 
             self.rect.y = 0 
@@ -59,7 +56,7 @@ class Bullet(GameSprite):
         self.rect.y += self.speed 
         if self.rect.y < 0: 
             self.kill() 
-
+             
 win_width = 700
 win_height = 500 
 display.set_caption("Shooter") 
@@ -86,7 +83,7 @@ while run:
                 fire_sound.play()
                 
 
-    if not finish:
+    if not finish: 
         window.blit(background,(0,0))
         collides = sprite.groupcollide(monsters,bullets,True,True)
         for c in collides:
@@ -107,7 +104,7 @@ while run:
         window.blit(text, (10, 20)) 
         text_lose = font2.render("Пропущено: " + str(lost), 1, (255, 255, 255)) 
         window.blit(text_lose, (10, 50)) 
-
+ 
         ship.update() 
         monsters.update() 
         bullets.update() 
@@ -116,5 +113,4 @@ while run:
         monsters.draw(window) 
         bullets.draw(window) 
         display.update() 
-
-time.delay(50)
+        time.delay(50)
